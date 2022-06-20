@@ -1,0 +1,12 @@
+[submodule "ControllableTalkNet"]
+	path = ControllableTalkNet
+	url = https://github.com/neutrogic/ControllableTalkNet
+	branch = master
+[submodule "tacotron2"]
+  path = tacotron2
+  url = https://github.com/neutrogic/tacotron2
+  branch = master
+[submodule "hifigan"]
+  path = hifigan
+  url = https://github.com/neutrogic/hifigan
+  branch = master
