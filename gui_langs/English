@@ -1,0 +1,61 @@
+LANG,English (US)
+FILE,eng.lang
+English,English
+Japanese,Japanese
+neuTalk,neuTalk
+Controls,Controls
+Play,Play
+Stop,Stop
+Save .wav,Save .wav
+Open .txt,Open .txt
+Voice Parameters,Voice Parameters
+Pitch,Pitch
+Speed,Speed
+Volume,Volume
+Pause,Pause
+Breath,Breath
+Speaker,Speaker
+Current Speaker,Current Speaker
+Site,Site
+ReadMe,ReadMe
+Model Controls,Model Controls
+Sub-Model,Sub-Model
+Use Wav Transfer Function,Use Wav Transfer Function
+Select a .wav file,Select a .wav file
+Browse,Browse
+Wav Transfer Controls,Wav Transfer Controls
+Author,Author
+Version,Version
+Export Text,Export Text
+Exit,Exit
+File,File
+Settings,Settings
+Dictionary Editor,Dictionary Editor
+Library Format Tool,Library Format Tool
+Help,Help
+About,About
+Default Speaker,Default Speaker
+Display Language,Default Language
+Speaker Library Parameter Entry,Speaker Library Parameter Entry
+Speaker Name,Speaker Name
+Speaker Icon,Speaker Icon
+＊Icon must have 1:1 aspect ratio!,＊Icon must have 1:1 aspect ratio!
+Autotune,Autotune
+Language,Language
+English,English
+Japanese,Japanese
+Current Dictionary,Current Dictionary
+Default Language,Default Language
+Change will appear upon reopening neuTalk.,Change will appear upon reopening neuTalk.
+Install Speaker,Install Speaker
+Select a speaker in .ntkpkg format.,Select a speaker in .ntkpkg format.
+Error,Error
+Incorrect file type.,Incorrect file type.
+Please select a .ntkpkg file.,Please select a .ntkpkg file.
+Speaker successfully installed.,Speaker successfully installed.
+Please restart neuTalk.,Please restart neuTalk.
+Audio,Audio
+Normalize Synthesized Audio,Normalize Synthesized Audio
+Speaker Website,Speaker Website
+Number of Models,Number of Models
+Speaker Version,Speaker Version

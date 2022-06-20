@@ -1,0 +1,5 @@
+speaker,speakers\tiger_lite
+pause_length,150
+dict,neutalk_default.dict
+lang,English
+normalize,yes

@@ -1,0 +1,59 @@
+LANG,Português (BR)
+FILE,pt-br.lang
+English,Inglês
+Japanese,Japonês
+neuTalk,neuTalk
+Controls,Controles
+Play,Tocar
+Stop,Parar
+Save .wav,Salvar .wav
+Open .txt,Abrir .txt
+Voice Parameters,Parâmetros de Voz
+Pitch,Tom
+Speed,Velocidade
+Volume,Volume
+Pause,Pausa
+Breath,Respiração
+Speaker,Locutor
+Current Speaker,Locutor Atual
+Site,Site
+ReadMe,ReadMe
+Model Controls,Controles do Modelo
+Sub-Model,Sub-Modelo
+Use Wav Transfer Function,Use a Função de Transferência de Wav
+Select a .wav file,Selecione um arquivo .wav
+Browse,Procurar
+Wav Transfer Controls,Controles de Transferência de Wav
+Author,Autor
+Version,Versão
+Export Text,Exportar Texto
+Exit,Sair
+File,Arquivo
+Settings,Definições
+Dictionary Editor,Editor de Dicionário
+Library Format Tool,Ferramenta de Formato de Biblioteca
+Help,Ajuda
+About,Sobre
+Default Speaker,Locutor Padrão
+Display Language,Idioma Padrão
+Speaker Library Parameter Entry,Entrada de Parâmetro da Biblioteca do Locutor
+Speaker Name,Nome do Locutor
+Speaker Icon,Ícone do Locutor
+＊Icon must have 1:1 aspect ratio!,＊O ícone deve ter proporção de 1:1!
+Autotune,Autotune
+Language,Idioma
+Current Dictionary,Dicionário Atual
+Default Language,Idioma Padrão
+Change will appear upon reopening neuTalk.,A mudança aparecerá ao reabrir o neuTalk.
+Install Speaker,Instalar Locutor
+Select a speaker in .ntkpkg format.,Selecione um locutor no formato .ntkpkg.
+Error,Erro
+Incorrect file type.,Tipo de arquivo incorreto.
+Please select a .ntkpkg file.,Selecione um arquivo .ntkpkg.
+Speaker successfully installed.,Locutor instalado com sucesso.
+Please restart neuTalk.,Por favor, reinicie o neuTalk.
+Audio,Audio
+Normalize Synthesized Audio,Normalizar Áudio Sintetizado
+Speaker Website,Site do Locutor
+Number of Models,Número de Modelos
+Speaker Version,Versão do Locutor

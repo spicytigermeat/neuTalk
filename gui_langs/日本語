@@ -1,0 +1,61 @@
+LANG,日本語
+FILE,jpn.lang
+English,英語
+Japanese,日本語
+neuTalk,neuTalk(ニュートーク)
+Controls,コントロール
+Play,再生
+Stop,停止
+Save .wav,.wav保存
+Open .txt,.txtを開く
+Voice Parameters,音声のパラメーター
+Pitch,ピッチ
+Speed,スピード
+Volume,ボリューム
+Pause,ポーズ
+Breath,ささやき
+Speaker,話者
+Current Speaker,現在の話者
+Site,サイト
+ReadMe,ReadMe
+Model Controls,モデルコントロール
+Sub-Model,サブモデル
+Use Wav Transfer Function,.wavトランスファー機能の使用
+Select a .wav file,.wavファイルの選択
+Browse,選択
+Wav Transfer Controls,.wavトランスファーのコントロール
+Author,開発者
+Version,モデル版
+Export Text,テキストをエクスポート
+Exit,終了
+File,ファイル
+Settings,設定
+Dictionary Editor,辞書エディター
+Library Format Tool,ライブラリフォーマットツール
+Help,ヘルプ
+About,neuTalkについて
+Default Speaker,デフォルト話者
+Display Language,ディスプレイ言語
+Speaker Library Parameter Entry,話者ライブラリーのパラメーターの記入
+Speaker Name,話者の名
+Speaker Icon,話者のイメージ
+＊Icon must have 1:1 aspect ratio!,＊イメージは、縦横比が1:1であることが条件！
+Autotune,オートチューニング
+Language,言語
+English,英語
+Japanese,日本語
+Current Dictionary,現在の辞書
+Default Language,デフォルト言語
+Change will appear upon reopening neuTalk.,neuTalkを再度開くと、変更が表示されます。
+Install Speaker,話者のインストール
+Select a speaker in .ntkpkg format.,話者が「.ntkpkg」フォーマットを選択します。
+Error,エラー
+Incorrect file type.,ファイルタイプは違います。
+Please select a .ntkpkg file.,「.ntkpkg」ファイルを選択してください。
+Speaker successfully installed.,話者が、インストールに成功しました。
+Please restart neuTalk.,neuTalkを再起動してください。
+Audio,オーディオ
+Normalize Synthesized Audio,合成したオーディオをノーマライズします。
+Speaker Website,話者のサイト
+Number of Models,モデル数
+Speaker Version,話者のバージョン
