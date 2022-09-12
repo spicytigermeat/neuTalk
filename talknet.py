@@ -297,6 +297,41 @@ def infer_jpn(str_input):
     del audio_np, sequence, mel, mel_post, _, alignment, y_g_hat, audio, audio_denoised
     gc.collect()
 
+def infer_zh(str_input):
+
+    global hifigan
+    global h
+    global denoiser
+    global tt_model
+
+    with torch.no_grad():
+
+        sequence = np.array(text_to_sequence(
+            zh.get_phones(str_input), ['convert_to_ascii']))[None, :]
+        
+        print(zh.get_phones(str_input))
+        """
+        if torch.cuda.is_available() == True:
+            sequence = torch.autograd.Variable(
+                torch.from_numpy(sequence)).cuda().long()
+        else:
+        """
+        sequence = torch.autograd.Variable(
+            torch.from_numpy(sequence)).long()
+
+        mel, mel_post, _, alignment = tt_model.inference(sequence)
+
+        y_g_hat = hifigan(mel)
+        audio = y_g_hat.squeeze()
+        audio = audio * MAX_WAV_VALUE
+        audio_denoised = denoiser(audio.view(1, -1), strength=35)[:, 0]
+        audio_np = audio_denoised.cpu().numpy().reshape(-1).astype(np.int16)
+
+    return audio_np
+
+    del audio_np, sequence, mel, mel_post, _, alignment, y_g_hat, audio, audio_denoised
+    gc.collect()
+
 
 def synthesize(text):
 
@@ -317,6 +352,14 @@ def synthesize_jpn(text):
     del audio
     gc.collect()
 
+def synthesize_zh(text):
+
+    audio = infer_zh(text)
+
+    return audio
+
+    del audio
+    gc.collect()
 
 def wav_transfer(text, pitch_fact, wav):
 
