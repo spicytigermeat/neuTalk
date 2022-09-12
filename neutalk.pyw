@@ -174,48 +174,45 @@ class neuTalk():
 
         main_window(root)
 
-def quit_pro(window):
+    def quit_pro(self):
 
-    window.destroy()
+        self.destroy()
 
-def about_win():
+    def about_win():
 
-    global neutalk_ver
+        global neutalk_ver
 
-    abt_win = ttkB.Toplevel()
-    abt_win.geometry(center(abt_win, 300, 200))
-    abt_win.title('About')
-    abt_win.focus_force()
-    abt_win.grab_set()
-    abt_win.iconbitmap('img/neutal_bw.ico')
+        abt_win = ttkB.Toplevel()
+        self.abt_win.geometry(center(abt_win, 300, 200))
+        self.abt_win.title('About')
+        self.abt_win.focus_force()
+        self.abt_win.grab_set()
 
-    table_frame = ttkB.Frame(abt_win)
-    table_frame.pack(padx=5, pady=5, fill=X, side=BOTTOM)
+        self.table_frame = ttkB.Frame(abt_win)
+        self.table_frame.pack(padx=5, pady=5, fill=X, side=BOTTOM)
 
-    data = [
-        ('NeMo', '1.8.0'),
-        ('pyworld', '0.3.0'),
-        ('ControllableTalkNet', '1.2'),
-        ('hifi-gan', 'N/A'),
-        ('tacotron2', 'N/A'),
-        ('PT-BR Translation', 'HAI-D')
-    ]
+        data = [
+            ('NeMo', '1.8.0'),
+            ('pyworld', '0.3.0'),
+            ('ControllableTalkNet', '1.2'),
+            ('hifi-gan', 'N/A')
+        ]
 
-    tv = ttkB.Treeview(
-        master=table_frame, columns=[0, 1], show=HEADINGS, height=5
-    )
-    for row in data:
-        tv.insert('', END, values=row)
+        tv = ttkB.Treeview(
+            master=table_frame, columns=[0, 1], show=HEADINGS, height=5
+        )
+        for row in data:
+            self.tv.insert('', END, values=row)
 
-    tv.selection_set('I001')
-    tv.heading(0, text='Dependency')
-    tv.heading(1, text='Version')
-    tv.column(0, width=200)
-    tv.column(1, width=100, anchor=CENTER)
-    tv.pack(side=LEFT, anchor=NE, fill=X)
+        self.tv.selection_set('I001')
+        self.tv.heading(0, text='Dependency')
+        self.tv.heading(1, text='Version')
+        self.tv.column(0, width=200)
+        self.tv.column(1, width=100, anchor=CENTER)
+        self.tv.pack(side=LEFT, anchor=NE, fill=X)
 
-    text = ('neuTalk (c) neutrogic 2022' + '\n' +
-            'Current Version: ' + neutalk_ver)
+        text = ('neuTalk (c) neutrogic 2022' + '\n' +
+                'Current Version: ' + neutalk_ver)
 
 
 def settings_win():
@@ -235,7 +232,7 @@ def settings_win():
     set_win = ttkB.Toplevel()
     set_win.geometry(center(set_win, 400, 250))
     set_win.title(fxy(lang['Settings']))
-    set_win.iconbitmap('img/neutal_bw.ico')
+    set_win.iconbitmap('img/orange.ico')
     set_win.focus_force()
     set_win.grab_set()
 
@@ -297,7 +294,6 @@ def change_default_speaker(event):
     global spkr_menu_list
     global spkr_dir_list
     global init_spkr
-    global pro_dir
 
     curr = spkr_dir_list[spkr_menu_list.index(init_spkr.get())]
 
@@ -306,7 +302,7 @@ def change_default_speaker(event):
     default_dict['speaker'] = 'speakers' + name
 
     try:
-        with open(os.path.join(pro_dir, 'default_param.csv'), 'w') as f:
+        with open(default_path, 'w') as f:
             for key in default_dict.keys():
                 f.write('%s,%s\n' % (key, default_dict[key]))
     except IOError:
@@ -322,7 +318,7 @@ def change_default_speaker(event):
 def main_window(root):
 
     root.geometry(center(root, 1, 1))  # Centers window with function
-    root.iconbitmap('img/neutal_bw.ico')
+    root.iconbitmap('img/orange.ico')
 
     global spkr_icon
     global spkr_lbl_frame
@@ -381,7 +377,7 @@ def main_window(root):
 
     file_menu = Menu(menu_bar, tearoff=0)
     file_menu.add_command(label=fxy(lang['Export Text']), command=export_txt)
-    file_menu.add_command(label=fxy(lang['Exit']),command=lambda: quit_pro(root))
+    # file_menu.add_command(label=fxy(lang['Exit']),command=quit_pro)
     menu_bar.add_cascade(label=fxy(lang['File']), menu=file_menu)
 
     sett_menu = Menu(menu_bar, tearoff=0)
@@ -397,7 +393,7 @@ def main_window(root):
 
     help_menu = Menu(menu_bar, tearoff=0)
     help_menu.add_command(label=fxy(lang['Help']), command=donashi)
-    help_menu.add_command(label=fxy(lang['About']),command=about_win)
+    # help_menu.add_command(label=fxy(lang['About']),command=about_win)
     menu_bar.add_cascade(label=fxy(lang['Help']), menu=help_menu)
 
     ASSET = Path(__file__).parent / 'img'
@@ -452,6 +448,10 @@ def main_window(root):
             wav_trsf_check.configure(state=DISABLED)
             wav_trsf_entry.configure(state=DISABLED)
             wav_trsf_button.configure(state=DISABLED)
+        if spkr_lang.get() == 'zh':
+            wav_trsf_check.configure(state=DISABLED)
+            wav_trsf_entry.configure(state=DISABLED)
+            wav_trsf_button.configure(state=DISABLED)
 
         icon1 = Image.open(os.path.join(spkr_dir.get(), spkr_dict['img'])).resize(
             (120, 120), Image.ANTIALIAS)
@@ -477,6 +477,9 @@ def main_window(root):
             talknet.load_talknet_models(curr)
 
         elif spkr_lang.get() == 'jpn':
+            talknet.load_tacotron_model(curr)
+
+        elif spkr_lang.get() == 'zh':
             talknet.load_tacotron_model(curr)
 
     def synthesize(text):
@@ -514,6 +517,8 @@ def main_window(root):
                     audio = talknet.synthesize(text_list[i])
                 elif spkr_lang.get() == 'jpn':
                     audio = talknet.synthesize_jpn(text_list[i])
+                elif spkr_lang.get() == 'zh':
+                    audio = talknet.synthesize_zh(text_list[i])
 
                 # writes audio depending on which model was used to synthesize
                 write(os.path.join('o/tmp' + str(i) + '.wav'), 22050, audio)
@@ -831,13 +836,13 @@ def main_window(root):
     spkr_lbl_frame.pack(side=TOP, padx=5, pady=5, fill=BOTH, expand=True)
 
     # Icon
-    icon = Image.open(spkr_img.get()).resize((120, 120), Image.LANCZOS)
+    icon = Image.open(spkr_img.get()).resize((120, 120), Image.ANTIALIAS)
     iconic = ImageTk.PhotoImage(icon, master=spkr_lbl_frame)
 
     spkr_icon = ttkB.Label(
         master=spkr_lbl_frame, image=iconic
     )
-    spkr_icon.pack(side=RIGHT, pady=5, padx=5)
+    spkr_icon.pack(side=RIGHT, pady=5)
 
     spkr_left = ttkB.Frame(
         master=spkr_lbl_frame
@@ -847,7 +852,7 @@ def main_window(root):
     info_frm = ttkB.Frame(
         master=spkr_left, width=230
     )
-    info_frm.pack(side=TOP, padx=5, pady=5, fill=BOTH)
+    info_frm.pack(side=TOP, padx=5, pady=5, fill=BOTH, expand=True)
 
     # Speaker Name
     spkr_name_lbl = ttkB.Label(
@@ -955,6 +960,10 @@ def main_window(root):
         wav_trsf_entry.configure(state=ACTIVE)
         wav_trsf_button.configure(state=ACTIVE)
     if spkr_lang.get() == 'jpn':
+        wav_trsf_check.configure(state=DISABLED)
+        wav_trsf_entry.configure(state=DISABLED)
+        wav_trsf_button.configure(state=DISABLED)
+    if spkr_lang.get() == 'zh':
         wav_trsf_check.configure(state=DISABLED)
         wav_trsf_entry.configure(state=DISABLED)
         wav_trsf_button.configure(state=DISABLED)
