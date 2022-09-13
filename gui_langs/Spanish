@@ -1,0 +1,63 @@
+LANG,Spanish (ES)
+FILE,es-cl.lang
+English,Inglés
+Japanese,Japonés
+Portuguese,Portugués
+Spanish,Español
+neuTalk,neuTalk
+Controls,Controles
+Play,Reproducir
+Stop,Parar
+Save .wav,Guardar como .wav
+Open .txt,Abrir .txt
+Voice Parameters,Parámetros de Voz
+Pitch,Tono
+Speed,Velocidad
+Volume,Volumen
+Pause,Pausa
+Breath,Breath
+Speaker,Voz
+Current Speaker,Voz Activa
+Site,Sitio Web
+ReadMe,Read Me (Léeme)
+Model Controls,Controles de Modelo
+Sub-Model,Sub-Modelos
+Use Wav Transfer Function,Usar Función de Transferencia .wav
+Select a .wav file,Selecciona un archivo .wav
+Browse,Buscar
+Wav Transfer Controls,Controles de Transferencia .wav
+Author,Autor
+Version,Versión
+Export Text,Exportar Texto
+Exit,Salir
+File,Archivo
+Settings,Ajustes
+Dictionary Editor,Editor de Diccionarios
+Library Format Tool,Herramienta de Formato de Librerías
+Help,Ayuda
+About,Sobre neuTalk
+Default Speaker,Voz Predeterminada
+Display Language,Lenguaje Activo
+Speaker Library Parameter Entry,Speaker Library Parameter Entry
+Speaker Name,Nombre de Voz
+Speaker Icon,Icono de Voz
+＊Icon must have 1:1 aspect ratio!,＊El icono debe de tener una relacion de aspecto 1:1!
+Autotune,Autotune
+Language,Lenguaje
+English,Inglés
+Japanese,Japonés
+Current Dictionary,Diccionario Activo
+Default Language,Lenguaje Predeterminado
+Change will appear upon reopening neuTalk.,Los cambios aparecerán al reiniciar neuTalk.
+Install Speaker,Instalar Voz
+Select a speaker in .ntkpkg format.,Selecciona una voz en formato .ntkpkg.
+Error,Error
+Incorrect file type.,Tipo de archivo incorrecto.
+Please select a .ntkpkg file.,Por favor, selecciona un archivo .ntkpkg.
+Speaker successfully installed.,Voz instalada correctamente.
+Please restart neuTalk.,Por favor, reinicia neuTalk.
+Audio,Audio
+Normalize Synthesized Audio,Normalizar Audio Sintetizado
+Speaker Website,Sitio Web
+Number of Models,Número de Modelos
+Speaker Version,Versión de Voz
