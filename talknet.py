@@ -19,7 +19,7 @@ from nemo.collections.tts.models.base import (SpectrogramGenerator,
 from nemo.collections.tts.models.talknet import (TalkNetDursModel,
                                                  TalkNetPitchModel,
                                                  TalkNetSpectModel)
-from ntk_g2p import jpn, zh
+from ntk_g2p import jpn, zh, fr, eng_tt2, eng_tt2_arpa
 from omegaconf import OmegaConf, open_dict
 from pydub import AudioSegment
 from scipy.io import wavfile
@@ -307,7 +307,7 @@ def infer_zh(str_input):
     with torch.no_grad():
 
         sequence = np.array(text_to_sequence(
-            zh.get_phones(str_input), ['convert_to_ascii']))[None, :]
+            zh.get_phones(str_input), ['return_text']))[None, :]
         
         print(zh.get_phones(str_input))
         """
@@ -332,6 +332,110 @@ def infer_zh(str_input):
     del audio_np, sequence, mel, mel_post, _, alignment, y_g_hat, audio, audio_denoised
     gc.collect()
 
+def infer_fr(str_input):
+
+    global hifigan
+    global h
+    global denoiser
+    global tt_model
+
+    with torch.no_grad():
+
+        sequence = np.array(text_to_sequence(
+            fr.get_phones(str_input), ['return_text']))[None, :]
+        
+        print(fr.get_phones(str_input))
+        """
+        if torch.cuda.is_available() == True:
+            sequence = torch.autograd.Variable(
+                torch.from_numpy(sequence)).cuda().long()
+        else:
+        """
+        sequence = torch.autograd.Variable(
+            torch.from_numpy(sequence)).long()
+
+        mel, mel_post, _, alignment = tt_model.inference(sequence)
+
+        y_g_hat = hifigan(mel)
+        audio = y_g_hat.squeeze()
+        audio = audio * MAX_WAV_VALUE
+        audio_denoised = denoiser(audio.view(1, -1), strength=35)[:, 0]
+        audio_np = audio_denoised.cpu().numpy().reshape(-1).astype(np.int16)
+
+    return audio_np
+
+    del audio_np, sequence, mel, mel_post, _, alignment, y_g_hat, audio, audio_denoised
+    gc.collect()
+
+def infer_eng_tt2(str_input):
+
+    global hifigan
+    global h
+    global denoiser
+    global tt_model
+
+    with torch.no_grad():
+
+        sequence = np.array(text_to_sequence(
+            eng_tt2.get_phones(str_input), ['english_cleaners']))[None, :]
+        
+        print(eng_tt2.get_phones(str_input))
+        """
+        if torch.cuda.is_available() == True:
+            sequence = torch.autograd.Variable(
+                torch.from_numpy(sequence)).cuda().long()
+        else:
+        """
+        sequence = torch.autograd.Variable(
+            torch.from_numpy(sequence)).long()
+
+        mel, mel_post, _, alignment = tt_model.inference(sequence)
+
+        y_g_hat = hifigan(mel)
+        audio = y_g_hat.squeeze()
+        audio = audio * MAX_WAV_VALUE
+        audio_denoised = denoiser(audio.view(1, -1), strength=35)[:, 0]
+        audio_np = audio_denoised.cpu().numpy().reshape(-1).astype(np.int16)
+
+    return audio_np
+
+    del audio_np, sequence, mel, mel_post, _, alignment, y_g_hat, audio, audio_denoised
+    gc.collect()
+
+def infer_eng_tt2_arpa(str_input):
+
+    global hifigan
+    global h
+    global denoiser
+    global tt_model
+
+    with torch.no_grad():
+
+        sequence = np.array(text_to_sequence(
+            eng_tt2_arpa.get_phones(str_input), ['english_cleaners']))[None, :]
+        
+        print(eng_tt2_arpa.get_phones(str_input))
+        """
+        if torch.cuda.is_available() == True:
+            sequence = torch.autograd.Variable(
+                torch.from_numpy(sequence)).cuda().long()
+        else:
+        """
+        sequence = torch.autograd.Variable(
+            torch.from_numpy(sequence)).long()
+
+        mel, mel_post, _, alignment = tt_model.inference(sequence)
+
+        y_g_hat = hifigan(mel)
+        audio = y_g_hat.squeeze()
+        audio = audio * MAX_WAV_VALUE
+        audio_denoised = denoiser(audio.view(1, -1), strength=35)[:, 0]
+        audio_np = audio_denoised.cpu().numpy().reshape(-1).astype(np.int16)
+
+    return audio_np
+
+    del audio_np, sequence, mel, mel_post, _, alignment, y_g_hat, audio, audio_denoised
+    gc.collect()
 
 def synthesize(text):
 
@@ -355,6 +459,33 @@ def synthesize_jpn(text):
 def synthesize_zh(text):
 
     audio = infer_zh(text)
+
+    return audio
+
+    del audio
+    gc.collect()
+
+def synthesize_fr(text):
+
+    audio = infer_fr(text)
+
+    return audio
+
+    del audio
+    gc.collect()
+    
+def synthesize_eng_tt2(text):
+
+    audio = infer_eng_tt2(text)
+
+    return audio
+
+    del audio
+    gc.collect()
+
+def synthesize_eng_tt2_arpa(text):
+
+    audio = infer_eng_tt2_arpa(text)
 
     return audio
 
