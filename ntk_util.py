@@ -152,6 +152,12 @@ def load_spkr(spkr_dir, sub_index):
             load_tacotron_model(sub_spkr_dir_list[0])
         elif spkr_dict['lang'] == 'zh':
             load_tacotron_model(sub_spkr_dir_list[0])
+        elif spkr_dict['lang'] == 'fr':
+            load_tacotron_model(sub_spkr_dir_list[0])
+        elif spkr_dict['lang'] == 'eng_tt2':
+            load_tacotron_model(sub_spkr_dir_list[0])
+        elif spkr_dict['lang'] == 'eng_tt2_arpa':
+            load_tacotron_model(sub_spkr_dir_list[0])
     else:
         for i in range(len(model_list)):
             sub_spkr_dir_list.append(os.path.join(
@@ -162,6 +168,12 @@ def load_spkr(spkr_dir, sub_index):
         elif spkr_dict['lang'] == 'jpn':
             load_tacotron_model(sub_spkr_dir_list[sub_index])
         elif spkr_dict['lang'] == 'zh':
+            load_tacotron_model(sub_spkr_dir_list[sub_index])
+        elif spkr_dict['lang'] == 'fr':
+            load_tacotron_model(sub_spkr_dir_list[sub_index])
+        elif spkr_dict['lang'] == 'eng_tt2':
+            load_tacotron_model(sub_spkr_dir_list[sub_index])
+        elif spkr_dict['lang'] == 'eng_tt2_arpa':
             load_tacotron_model(sub_spkr_dir_list[sub_index])
 
     return spkr_dict, sub_spkr_dir_list, sub_spkr_menu_list
