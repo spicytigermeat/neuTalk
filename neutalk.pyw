@@ -452,6 +452,18 @@ def main_window(root):
             wav_trsf_check.configure(state=DISABLED)
             wav_trsf_entry.configure(state=DISABLED)
             wav_trsf_button.configure(state=DISABLED)
+        if spkr_lang.get() == 'fr':
+            wav_trsf_check.configure(state=DISABLED)
+            wav_trsf_entry.configure(state=DISABLED)
+            wav_trsf_button.configure(state=DISABLED)
+        if spkr_lang.get() == 'eng_tt2':
+            wav_trsf_check.configure(state=DISABLED)
+            wav_trsf_entry.configure(state=DISABLED)
+            wav_trsf_button.configure(state=DISABLED)
+        if spkr_lang.get() == 'eng_tt2_arpa':
+            wav_trsf_check.configure(state=DISABLED)
+            wav_trsf_entry.configure(state=DISABLED)
+            wav_trsf_button.configure(state=DISABLED)
 
         icon1 = Image.open(os.path.join(spkr_dir.get(), spkr_dict['img'])).resize(
             (120, 120), Image.ANTIALIAS)
@@ -480,6 +492,12 @@ def main_window(root):
             talknet.load_tacotron_model(curr)
 
         elif spkr_lang.get() == 'zh':
+            talknet.load_tacotron_model(curr)
+        elif spkr_lang.get() == 'fr':
+            talknet.load_tacotron_model(curr)
+        elif spkr_lang.get() == 'eng_tt2':
+            talknet.load_tacotron_model(curr)
+        elif spkr_lang.get() == 'eng_tt2_arpa':
             talknet.load_tacotron_model(curr)
 
     def synthesize(text):
@@ -519,6 +537,12 @@ def main_window(root):
                     audio = talknet.synthesize_jpn(text_list[i])
                 elif spkr_lang.get() == 'zh':
                     audio = talknet.synthesize_zh(text_list[i])
+                elif spkr_lang.get() == 'fr':
+                    audio = talknet.synthesize_fr(text_list[i])
+                elif spkr_lang.get() == 'eng_tt2':
+                    audio = talknet.synthesize_eng_tt2(text_list[i])
+                elif spkr_lang.get() == 'eng_tt2_arpa':
+                    audio = talknet.synthesize_eng_tt2_arpa(text_list[i])
 
                 # writes audio depending on which model was used to synthesize
                 write(os.path.join('o/tmp' + str(i) + '.wav'), 22050, audio)
@@ -964,6 +988,18 @@ def main_window(root):
         wav_trsf_entry.configure(state=DISABLED)
         wav_trsf_button.configure(state=DISABLED)
     if spkr_lang.get() == 'zh':
+        wav_trsf_check.configure(state=DISABLED)
+        wav_trsf_entry.configure(state=DISABLED)
+        wav_trsf_button.configure(state=DISABLED)
+    if spkr_lang.get() == 'fr':
+        wav_trsf_check.configure(state=DISABLED)
+        wav_trsf_entry.configure(state=DISABLED)
+        wav_trsf_button.configure(state=DISABLED)
+    if spkr_lang.get() == 'eng_tt2':
+        wav_trsf_check.configure(state=DISABLED)
+        wav_trsf_entry.configure(state=DISABLED)
+        wav_trsf_button.configure(state=DISABLED)
+    if spkr_lang.get() == 'eng_tt2_arpa':
         wav_trsf_check.configure(state=DISABLED)
         wav_trsf_entry.configure(state=DISABLED)
         wav_trsf_button.configure(state=DISABLED)
