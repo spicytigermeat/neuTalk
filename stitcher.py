@@ -3,6 +3,7 @@
 # Parses text for tt2/hfg inference and stitches audio together. not sure why i put them in a seperate script but i'm not going to apologize for it.
 
 import os
+from natsort import natsorted
 import re
 import sys
 from pathlib import Path
@@ -24,14 +25,14 @@ vol_dict = {0: 5, 1: 4, 2: 3, 3: 2, 4: 1,
 def text_cutter(text):
 
     lines = []
-    lines = text.replace(',', '.'
-                         ).replace('!', '.'
-                                   ).replace('?', '.'
+    lines = text.replace(',', ',.'
+                         ).replace('!', '!.'
+                                   ).replace('?', '?.'
                                              ).replace('\n', ''
-                                                       ).replace('。', '.'
-                                                                 ).replace('、', '.'
-                                                                           ).replace('！', '.'
-                                                                                     ).replace('？', '.'
+                                                       ).replace('。', '。.'
+                                                                 ).replace('、', '、.'
+                                                                           ).replace('！', '！.'
+                                                                                     ).replace('？', '？.'
                                                                                                ).replace(']', ']]'
                                                                                                          ).split('.')
 
@@ -57,6 +58,7 @@ def audio_stitch(pause_len, volume_factor, normalize):
 
     pau = AudioSegment.silent(duration=pause_len)
     files = os.listdir(os.path.join(o_dir))
+    files = natsorted(files)
 
     sound = AudioSegment.silent(duration=100)
 
