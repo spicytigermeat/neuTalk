@@ -1,3 +1,40 @@
+import csv
+import globalparam
+
+import os
+import sys
+import time
+import argparse
+import resampy
+import uuid
+import time
+from scipy.io.wavfile import write
+from pydub import AudioSegment, effects
+import os.path
+import numpy as np
+import sys
+import soundfile as sf
+import torch, json, emoji
+from uberduck_ml_dev.vendor.tfcompat.hparam import HParams as hps
+from uberduck_ml_dev.vocoders.hifigan import HiFiGanGenerator
+from uberduck_ml_dev.models.tacotron2 import Tacotron2 as tt2
+from uberduck_ml_dev.models.tacotron2 import DEFAULTS
+from uberduck_ml_dev.data_loader import prepare_input_sequence, pad_sequences
+from uberduck_ml_dev.data_loader import text_to_sequence as tts
+from uberduck_ml_dev.models.torchmoji import TorchMojiInterface
+import numpy
+import soundfile as sf
+import gc
+import warnings
+import base64
+import time
+from uberduck_ml_dev.text.symbols import (
+    DEFAULT_SYMBOLS,
+    NVIDIA_TACO2_SYMBOLS,
+)
+
+
+
 import gc
 import io
 import json
@@ -19,7 +56,7 @@ from nemo.collections.tts.models.base import (SpectrogramGenerator,
 from nemo.collections.tts.models.talknet import (TalkNetDursModel,
                                                  TalkNetPitchModel,
                                                  TalkNetSpectModel)
-from ntk_g2p import jpn, zh, fr, eng_tt2, eng_tt2_arpa
+from ntk_g2p import jpn, zh, fr, eng_tt2, eng_tt2_arpa, pipeline
 from omegaconf import OmegaConf, open_dict
 from pydub import AudioSegment
 from scipy.io import wavfile
@@ -168,6 +205,97 @@ def load_tacotron_model(modeldir):
         hifigan.eval()
     hifigan.remove_weight_norm()
 
+def load_pipeline_model(modeldir):
+    
+    unload_models()
+
+    global filename
+    global symbol_set
+    global cpu_run
+    global torchmoji
+    global use_gpu
+    global taco
+    global hifigan
+    global speakerid
+
+    if not os.path.exists('temp'):
+        os.mkdir('temp')
+
+    with tarfile.open(modeldir, 'r:') as tar:
+        tar.extractall('temp')
+        tar.close()
+
+    warnings.filterwarnings("ignore")
+
+    EMOJIS = ":joy: :unamused: :weary: :sob: :heart_eyes: \
+    :pensive: :ok_hand: :blush: :heart: :smirk: \
+    :grin: :notes: :flushed: :100: :sleeping: \
+    :relieved: :relaxed: :raised_hands: :two_hearts: :expressionless: \
+    :sweat_smile: :pray: :confused: :kissing_heart: :heartbeat: \
+    :neutral_face: :information_desk_person: :disappointed: :see_no_evil: :tired_face: \
+    :v: :sunglasses: :rage: :thumbsup: :cry: \
+    :sleepy: :yum: :triumph: :hand: :mask: \
+    :clap: :eyes: :gun: :persevere: :smiling_imp: \
+    :sweat: :broken_heart: :yellow_heart: :musical_note: :speak_no_evil: \
+    :wink: :skull: :confounded: :smile: :stuck_out_tongue_winking_eye: \
+    :angry: :no_good: :muscle: :facepunch: :purple_heart: \
+    :sparkling_heart: :blue_heart: :grimacing: :sparkles:".split(' ')
+
+    synthesis_length = 20
+    gate_threshold = 0.05
+    default_config = False
+    use_torchmoji = True
+    modelo = 'temp/hifiganmodel'
+    if torch.cuda.is_available() == True:
+        use_gpu = True
+    else:
+        use_gpu = False
+    cpu_run = (not use_gpu)
+    device = "cpu" if not use_gpu else "cuda"
+    gc.enable()
+    filename = None
+    nome_modelo = 'temp/tacotron2.pt'
+    torchmoji = TorchMojiInterface(
+                    "vocabulary.json",
+                    "pytorch_model.bin",
+    )
+    config = DEFAULTS.values()
+    modelo = 'temp/hifiganmodel'
+    hifigan = HiFiGanGenerator(
+    config="temp/config.json",
+    checkpoint=modelo,
+    cudnn_enabled=use_gpu
+    )
+    model = torch.load(nome_modelo, map_location=device)
+    symbol_set = "nvidia_taco2"
+    cleaner = 'english_cleaners'
+    modelo = 'temp/hifiganmodel'
+    fn = "temp/conf.json"
+    with open(fn) as f:
+        config.update(json.load(f))
+    config.update(
+          {
+            "max_decoder_steps": synthesis_length * 100,
+            "gate_threshold": gate_threshold,
+            "symbol_set": symbol_set
+          }
+    )
+    hparams = hps(**config)
+    taco = tt2(hparams)
+    taco.from_pretrained(warm_start_path=nome_modelo, device=device)
+
+    with open(modeldir + '/../../speaker.ntk_cfg', 'r') as file:
+            reader = csv.reader(file)
+            row1 = next(reader)
+            row2 = next(reader)
+            row3 = next(reader)
+            row4 = next(reader)
+            row5 = next(reader)
+            row6 = next(reader)
+            row7 = next(reader)
+            row8 = next(reader)
+            speakerid = row8[1]
+
 
 def load_hifigan_model(hifigan_path, config):
 
@@ -297,6 +425,62 @@ def infer_jpn(str_input):
     del audio_np, sequence, mel, mel_post, _, alignment, y_g_hat, audio, audio_denoised
     gc.collect()
 
+def infer_pipeline(str_input):
+    with torch.no_grad():
+        text = str_input
+        if not filename:
+            start = time.time()
+            arpabet = True
+            arpabet = 0.0 if not arpabet else 1.0
+            speakerID = int(speakerid)
+
+        if text.find("|")!=-1:
+            text = text.split("|")
+            torchmoji_override = text[1]
+            text = text[0]
+        else:
+            torchmoji_override = ""
+        cleaner = 'english_cleaners'
+        seqs = []
+        seqs.append(
+            torch.IntTensor(
+                tts(
+                    text=text,
+                    cleaner_names=[cleaner],
+                    p_arpabet=arpabet,
+                    symbol_set=symbol_set,
+                )[:]
+            )
+        )
+
+        compute_gst = lambda texts: torchmoji.encode_texts(texts)
+        text_padded, input_lengths = pad_sequences(seqs)
+        if not cpu_run:
+            text_padded = text_padded.cuda().long()
+            input_lengths = input_lengths.cuda().long()
+        else:
+            text_padded = text_padded.long()
+            input_lengths = input_lengths.long()
+
+        embedding = None
+        if torchmoji_override != "":
+            embedding = compute_gst([torchmoji_override])
+        else:
+            embedding = compute_gst([text])
+        embedding = torch.FloatTensor(embedding)
+
+        emojis = torchmoji.enc2emojis(embedding)[0]
+        emojo = (emoji.emojize(f" {' '.join(emojis)}", language="alias"))
+
+        embedding = embedding.cuda() if use_gpu else embedding
+        speakerembedding =  torch.LongTensor([speakerID]).cuda() if use_gpu else torch.LongTensor([speakerID])
+        input_ = [text_padded, input_lengths, speakerembedding, embedding]
+        output = taco.inference(input_)
+        audio = hifigan.infer(output[1][:1])
+        audio_np = audio
+
+    return audio_np
+
 def infer_zh(str_input):
 
     global hifigan
@@ -340,7 +524,7 @@ def infer_fr(str_input):
     global tt_model
 
     with torch.no_grad():
-
+        
         sequence = np.array(text_to_sequence(
             fr.get_phones(str_input), ['return_text']))[None, :]
         
@@ -491,6 +675,16 @@ def synthesize_eng_tt2_arpa(text):
 
     del audio
     gc.collect()
+
+def synthesize_pipeline(text):
+
+    audio = infer_pipeline(text)
+
+    return audio
+
+    del audio
+    gc.collect()
+
 
 def wav_transfer(text, pitch_fact, wav):
 
