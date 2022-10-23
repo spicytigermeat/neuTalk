@@ -93,3 +93,11 @@ class eng_tt2_arpa():
         output_text = fxy(re.sub('   ', '} {', output_text))
         output_text = fxy(re.sub('{.}', '.', output_text))
         return output_text
+
+class pipeline():
+    def __init__():
+        super().__init__()
+
+    def get_phones(input_text):
+        output_text = input_text
+        return output_text
