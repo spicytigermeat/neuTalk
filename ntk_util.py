@@ -10,7 +10,7 @@ from tkinter.filedialog import askopenfilename
 import ttkbootstrap as ttk
 from ControllableTalkNet.core.extract import ExtractDuration
 from ftfy import fix_text as fxy
-from talknet import load_tacotron_model, load_talknet_models
+from talknet import load_tacotron_model, load_talknet_models, load_pipeline_model
 from ttkbootstrap.constants import *
 from ttkbootstrap.dialogs import Messagebox
 
@@ -158,6 +158,8 @@ def load_spkr(spkr_dir, sub_index):
             load_tacotron_model(sub_spkr_dir_list[0])
         elif spkr_dict['lang'] == 'eng_tt2_arpa':
             load_tacotron_model(sub_spkr_dir_list[0])
+        elif spkr_dict['lang'] == 'pipeline':
+            load_pipeline_model(sub_spkr_dir_list[0])
     else:
         for i in range(len(model_list)):
             sub_spkr_dir_list.append(os.path.join(
@@ -175,6 +177,8 @@ def load_spkr(spkr_dir, sub_index):
             load_tacotron_model(sub_spkr_dir_list[sub_index])
         elif spkr_dict['lang'] == 'eng_tt2_arpa':
             load_tacotron_model(sub_spkr_dir_list[sub_index])
+        elif spkr_dict['lang'] == 'pipeline':
+            load_pipeline_model(sub_spkr_dir_list[sub_index])
 
     return spkr_dict, sub_spkr_dir_list, sub_spkr_menu_list
 
