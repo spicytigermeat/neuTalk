@@ -464,6 +464,10 @@ def main_window(root):
             wav_trsf_check.configure(state=DISABLED)
             wav_trsf_entry.configure(state=DISABLED)
             wav_trsf_button.configure(state=DISABLED)
+        if spkr_lang.get() == 'pipeline':
+            wav_trsf_check.configure(state=DISABLED)
+            wav_trsf_entry.configure(state=DISABLED)
+            wav_trsf_button.configure(state=DISABLED)
 
         icon1 = Image.open(os.path.join(spkr_dir.get(), spkr_dict['img'])).resize(
             (120, 120), Image.ANTIALIAS)
@@ -499,6 +503,8 @@ def main_window(root):
             talknet.load_tacotron_model(curr)
         elif spkr_lang.get() == 'eng_tt2_arpa':
             talknet.load_tacotron_model(curr)
+        elif spkr_lang.get() == 'pipeline':
+            talknet.load_pipeline_model(curr)
 
     def synthesize(text):
 
@@ -543,6 +549,8 @@ def main_window(root):
                     audio = talknet.synthesize_eng_tt2(text_list[i])
                 elif spkr_lang.get() == 'eng_tt2_arpa':
                     audio = talknet.synthesize_eng_tt2_arpa(text_list[i])
+                elif spkr_lang.get() == 'pipeline':
+                    audio = talknet.synthesize_pipeline(text_list[i])
 
                 # writes audio depending on which model was used to synthesize
                 write(os.path.join('o/tmp' + str(i) + '.wav'), 22050, audio)
@@ -659,8 +667,27 @@ def main_window(root):
                      font=('Roboto', 9),
                      wrap=WORD,
                      bd=0)
-    t_in.insert(
-        '1.0', "In this text box, enter any text you'd like to hear and the selected speaker will {R IY D} it aloud.")
+    if spkr_lang.get() == 'eng':
+        t_in.insert(
+            '1.0', "In this text box, enter any text you'd like to hear and the selected speaker will {R IY D} it aloud.")
+    if spkr_lang.get() == 'jpn':
+        t_in.insert(
+            '1.0', "このテキストの枠に、聞きたいテキストを入力すると選んだスピーカーが朗読します。")
+    if spkr_lang.get() == 'zh':
+        t_in.insert(
+            '1.0', "在这个文本框中，输入你想听到的任何文本，所选的发言人将大声朗读它。")
+    if spkr_lang.get() == 'fr':
+        t_in.insert(
+            '1.0', "Dans cette zone de texte, saisissez le texte que vous souhaitez entendre et l'orateur sélectionné le lira à haute voix.")
+    if spkr_lang.get() == 'eng_tt2':
+        t_in.insert(
+            '1.0', "In this text box, enter any text you'd like to hear and the selected speaker will read it aloud.")
+    if spkr_lang.get() == 'eng_tt2_arpa':
+        t_in.insert(
+            '1.0', "In this text box, enter any text you'd like to hear and the selected speaker will reed it aloud.")
+    if spkr_lang.get() == 'pipeline':
+        t_in.insert(
+            '1.0', "In this text box, enter any text you'd like to hear and the selected speaker will {R IY1 D} it aloud.")
     t_in.place(x=0, y=0, height=200, width=370)
     # =================================================================================
 
@@ -1000,6 +1027,10 @@ def main_window(root):
         wav_trsf_entry.configure(state=DISABLED)
         wav_trsf_button.configure(state=DISABLED)
     if spkr_lang.get() == 'eng_tt2_arpa':
+        wav_trsf_check.configure(state=DISABLED)
+        wav_trsf_entry.configure(state=DISABLED)
+        wav_trsf_button.configure(state=DISABLED)
+    if spkr_lang.get() == 'pipeline':
         wav_trsf_check.configure(state=DISABLED)
         wav_trsf_entry.configure(state=DISABLED)
         wav_trsf_button.configure(state=DISABLED)
