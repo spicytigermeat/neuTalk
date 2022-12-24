@@ -33,7 +33,7 @@ from uberduck_ml_dev.text.symbols import (
     NVIDIA_TACO2_SYMBOLS,
 )
 
-
+import tensorflow as tf
 
 import gc
 import io
@@ -56,7 +56,8 @@ from nemo.collections.tts.models.base import (SpectrogramGenerator,
 from nemo.collections.tts.models.talknet import (TalkNetDursModel,
                                                  TalkNetPitchModel,
                                                  TalkNetSpectModel)
-from ntk_g2p import jpn, zh, fr, eng_tt2, eng_tt2_arpa, pipeline
+
+from ntk_g2p import jpn, zh, fr, eng_tt2, eng_tt2_arpa, pipeline, return_text
 from omegaconf import OmegaConf, open_dict
 from pydub import AudioSegment
 from scipy.io import wavfile
@@ -371,7 +372,7 @@ def infer_f0_shift(text):
         spect = spec_gen.force_spectrogram(tokens=tokens,
                                            durs=torch.from_numpy(durs).view(
                                                1, -1).type(torch.LongTensor).to(DEVICE),
-                                           f0=torch.FloatTensor(f0_with_silence).view(1, -1).to(DEVICE))
+                                           f0=torch.FloatTensor(f0_wo_silence).view(1, -1).to(DEVICE))
 
         y_g_hat = hifigan(spect.float())
         audio = y_g_hat.squeeze()
@@ -621,6 +622,41 @@ def infer_eng_tt2_arpa(str_input):
     del audio_np, sequence, mel, mel_post, _, alignment, y_g_hat, audio, audio_denoised
     gc.collect()
 
+def infer_return_text(str_input):
+
+    global hifigan
+    global h
+    global denoiser
+    global tt_model
+
+    with torch.no_grad():
+
+        sequence = np.array(text_to_sequence(
+            return_text.get_phones(str_input), ['return_text']))[None, :]
+        
+        print(return_text.get_phones(str_input))
+        """
+        if torch.cuda.is_available() == True:
+            sequence = torch.autograd.Variable(
+                torch.from_numpy(sequence)).cuda().long()
+        else:
+        """
+        sequence = torch.autograd.Variable(
+            torch.from_numpy(sequence)).long()
+
+        mel, mel_post, _, alignment = tt_model.inference(sequence)
+
+        y_g_hat = hifigan(mel)
+        audio = y_g_hat.squeeze()
+        audio = audio * MAX_WAV_VALUE
+        audio_denoised = denoiser(audio.view(1, -1), strength=35)[:, 0]
+        audio_np = audio_denoised.cpu().numpy().reshape(-1).astype(np.int16)
+
+    return audio_np
+
+    del audio_np, sequence, mel, mel_post, _, alignment, y_g_hat, audio, audio_denoised
+    gc.collect()
+
 def synthesize(text):
 
     audio = infer(text)
@@ -685,6 +721,15 @@ def synthesize_pipeline(text):
     del audio
     gc.collect()
 
+def synthesize_return_text(text):
+
+    audio = infer_return_text(text)
+
+    return audio
+
+    del audio
+    gc.collect()
+
 
 def wav_transfer(text, pitch_fact, wav):
 
@@ -727,8 +772,16 @@ def wav_transfer(text, pitch_fact, wav):
         audio = audio * MAX_WAV_VALUE
         audio_denoised = denoiser(audio.view(1, -1), strength=35)[:, 0]
         audio_np = audio_denoised.detach().cpu().numpy().reshape(-1).astype(np.int16)
+        ao = open('autotune.txt', mode='r', encoding='UTF-8')
+        aoi = ao.read()
+        ao.close()
+        if aoi=='1':
+            audio_np = extract_pitch.auto_tune(audio_np, audio, f0s_wo_silence)
+            return audio_np
+        else:
+            audio_np=audio_np
+            return audio_np
 
-    return audio_np
 
     del extract_dur, extract_pitch, new_wav, token_list, tokens, arpa, durs, f0_with_silence, f0s_wo_silence
     del y_g_hat, spect, audio, audio_denoised, audio_np
