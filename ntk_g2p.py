@@ -101,3 +101,11 @@ class pipeline():
     def get_phones(input_text):
         output_text = input_text
         return output_text
+    
+class return_text():
+    def __init__():
+        super().__init__()
+
+    def get_phones(input_text):
+        output_text = input_text
+        return output_text
