@@ -160,6 +160,8 @@ def load_spkr(spkr_dir, sub_index):
             load_tacotron_model(sub_spkr_dir_list[0])
         elif spkr_dict['lang'] == 'pipeline':
             load_pipeline_model(sub_spkr_dir_list[0])
+        elif spkr_dict['lang'] == 'return_text':
+            load_tacotron_model(sub_spkr_dir_list[0])
     else:
         for i in range(len(model_list)):
             sub_spkr_dir_list.append(os.path.join(
@@ -179,6 +181,8 @@ def load_spkr(spkr_dir, sub_index):
             load_tacotron_model(sub_spkr_dir_list[sub_index])
         elif spkr_dict['lang'] == 'pipeline':
             load_pipeline_model(sub_spkr_dir_list[sub_index])
+        elif spkr_dict['lang'] == 'return_text':
+            load_tacotron_model(sub_spkr_dir_list[sub_index])
 
     return spkr_dict, sub_spkr_dir_list, sub_spkr_menu_list
 
