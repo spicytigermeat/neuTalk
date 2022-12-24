@@ -357,6 +357,8 @@ def main_window(root):
     global default_dict
     global normalize
 
+    #global autotune_onoff
+
     global t_in
 
     syn_pitch = IntVar()
@@ -364,12 +366,14 @@ def main_window(root):
     syn_speed = IntVar()
     syn_breath = IntVar()
     transf_var = IntVar()
+    autotune_onoff = IntVar()
 
     syn_pitch.set(10)
     syn_speed.set(10)
     syn_volume.set(5)
     syn_breath.set(0)
     transf_var.set(0)
+    autotune_onoff.set(0)
 
     # Sets up menu.
     menu_bar = Menu(master=root, background='gray12', fg='white')
@@ -444,30 +448,42 @@ def main_window(root):
             wav_trsf_check.configure(state=ACTIVE)
             wav_trsf_entry.configure(state=ACTIVE)
             wav_trsf_button.configure(state=ACTIVE)
+            autotune_check.configure(state=ACTIVE)
         if spkr_lang.get() == 'jpn':
             wav_trsf_check.configure(state=DISABLED)
             wav_trsf_entry.configure(state=DISABLED)
             wav_trsf_button.configure(state=DISABLED)
+            autotune_check.configure(state=DISABLED)
         if spkr_lang.get() == 'zh':
             wav_trsf_check.configure(state=DISABLED)
             wav_trsf_entry.configure(state=DISABLED)
             wav_trsf_button.configure(state=DISABLED)
+            autotune_check.configure(state=DISABLED)
         if spkr_lang.get() == 'fr':
             wav_trsf_check.configure(state=DISABLED)
             wav_trsf_entry.configure(state=DISABLED)
             wav_trsf_button.configure(state=DISABLED)
+            autotune_check.configure(state=DISABLED)
         if spkr_lang.get() == 'eng_tt2':
             wav_trsf_check.configure(state=DISABLED)
             wav_trsf_entry.configure(state=DISABLED)
             wav_trsf_button.configure(state=DISABLED)
+            autotune_check.configure(state=DISABLED)
         if spkr_lang.get() == 'eng_tt2_arpa':
             wav_trsf_check.configure(state=DISABLED)
             wav_trsf_entry.configure(state=DISABLED)
             wav_trsf_button.configure(state=DISABLED)
+            autotune_check.configure(state=DISABLED)
         if spkr_lang.get() == 'pipeline':
             wav_trsf_check.configure(state=DISABLED)
             wav_trsf_entry.configure(state=DISABLED)
             wav_trsf_button.configure(state=DISABLED)
+            autotune_check.configure(state=DISABLED)
+        if spkr_lang.get() == 'return_text':
+            wav_trsf_check.configure(state=DISABLED)
+            wav_trsf_entry.configure(state=DISABLED)
+            wav_trsf_button.configure(state=DISABLED)
+            autotune_check.configure(state=DISABLED)
 
         icon1 = Image.open(os.path.join(spkr_dir.get(), spkr_dict['img'])).resize(
             (120, 120), Image.ANTIALIAS)
@@ -505,8 +521,13 @@ def main_window(root):
             talknet.load_tacotron_model(curr)
         elif spkr_lang.get() == 'pipeline':
             talknet.load_pipeline_model(curr)
+        elif spkr_lang.get() == 'return_text':
+            talknet.load_tacotron_model(curr)
 
     def synthesize(text):
+        aoo=open('autotune.txt', mode='w', encoding='UTF-8')
+        aoo.write(str(autotune_onoff.get()))
+        aoo.close()
 
         global pro_dir
         global pause_length
@@ -551,6 +572,8 @@ def main_window(root):
                     audio = talknet.synthesize_eng_tt2_arpa(text_list[i])
                 elif spkr_lang.get() == 'pipeline':
                     audio = talknet.synthesize_pipeline(text_list[i])
+                elif spkr_lang.get() == 'return_text':
+                    audio = talknet.synthesize_return_text(text_list[i])
 
                 # writes audio depending on which model was used to synthesize
                 write(os.path.join('o/tmp' + str(i) + '.wav'), 22050, audio)
@@ -688,6 +711,9 @@ def main_window(root):
     if spkr_lang.get() == 'pipeline':
         t_in.insert(
             '1.0', "In this text box, enter any text you'd like to hear and the selected speaker will {R IY1 D} it aloud.")
+    if spkr_lang.get() == 'return_text':
+        t_in.insert(
+            '1.0', "In this text box, enter any text you'd like to hear and the selected speaker will read it aloud.")
     t_in.place(x=0, y=0, height=200, width=370)
     # =================================================================================
 
@@ -1005,6 +1031,13 @@ def main_window(root):
         master=wav_trsf_frame, text=fxy(lang['Browse']), width=9, command=trsf_wav_set
     )
     wav_trsf_button.grid(row=1, column=1, padx=5, pady=5, sticky='w')
+    #autotune on/off
+    autotune_check = ttkB.Checkbutton(
+        bootstyle='round-toggle', master=wav_trsf_frame, onvalue=1,
+        offvalue=0, text=fxy(lang['Enable autotune']), variable=autotune_onoff
+    )
+    autotune_check.grid(row=2, column=0, columnspan=2, padx=5, pady=5, sticky='w')
+    
 
     if spkr_lang.get() == 'eng':
         wav_trsf_check.configure(state=ACTIVE)
@@ -1014,26 +1047,37 @@ def main_window(root):
         wav_trsf_check.configure(state=DISABLED)
         wav_trsf_entry.configure(state=DISABLED)
         wav_trsf_button.configure(state=DISABLED)
+        autotune_check.configure(state=DISABLED)
     if spkr_lang.get() == 'zh':
         wav_trsf_check.configure(state=DISABLED)
         wav_trsf_entry.configure(state=DISABLED)
         wav_trsf_button.configure(state=DISABLED)
+        autotune_check.configure(state=DISABLED)
     if spkr_lang.get() == 'fr':
         wav_trsf_check.configure(state=DISABLED)
         wav_trsf_entry.configure(state=DISABLED)
         wav_trsf_button.configure(state=DISABLED)
+        autotune_check.configure(state=DISABLED)
     if spkr_lang.get() == 'eng_tt2':
         wav_trsf_check.configure(state=DISABLED)
         wav_trsf_entry.configure(state=DISABLED)
         wav_trsf_button.configure(state=DISABLED)
+        autotune_check.configure(state=DISABLED)
     if spkr_lang.get() == 'eng_tt2_arpa':
         wav_trsf_check.configure(state=DISABLED)
         wav_trsf_entry.configure(state=DISABLED)
         wav_trsf_button.configure(state=DISABLED)
+        autotune_check.configure(state=DISABLED)
     if spkr_lang.get() == 'pipeline':
         wav_trsf_check.configure(state=DISABLED)
         wav_trsf_entry.configure(state=DISABLED)
         wav_trsf_button.configure(state=DISABLED)
+        autotune_check.configure(state=DISABLED)
+    if spkr_lang.get() == 'return_text':
+        wav_trsf_check.configure(state=DISABLED)
+        wav_trsf_entry.configure(state=DISABLED)
+        wav_trsf_button.configure(state=DISABLED)
+        autotune_check.configure(state=DISABLED)
     # ===========================================================================================================
 
     logo1 = Image.open('img/lil_logo.png')
