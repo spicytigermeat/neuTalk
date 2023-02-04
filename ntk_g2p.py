@@ -1,10 +1,15 @@
 import re
 from pyopenjtalk import g2p
 from pypinyin import pinyin, lazy_pinyin, Style
+from phonemizer import phonemize
+from phonemizer.separator import Separator
+from g2p_en import G2p
 from ftfy import fix_text as fxy
 import tkinter.filedialog as fd
 import shutil
 import os
+
+from phonemizer.backend.espeak.wrapper import EspeakWrapper
 
 class eng(): #including this so I can edit english input outside of the tokenizer from talknet
 
@@ -50,4 +55,57 @@ class zh():
 
         output_text = fxy(re.sub('。', '.', output_text) + '.')
 
+        return output_text
+
+class fr():
+    def __init__():
+        super().__init__()
+
+    def get_phones(input_text):
+        EspeakWrapper.set_library('libespeak-ng.dll')
+        output_text = ''
+        output_text = phonemize(
+            output_text,
+            language='fr-fr',
+            backend='espeak',
+            separator=Separator(phone=None, word=' ', syllable=None),
+            strip=True,
+            preserve_punctuation=True,
+            njobs=4)
+        return output_text
+
+class eng_tt2():
+    def __init__():
+        super().__init__()
+
+    def get_phones(input_text):
+        output_text = input_text
+        return output_text
+
+class eng_tt2_arpa():
+    def __init__():
+        super().__init__()
+
+    def get_phones(input_text):
+        g2p = G2p()
+        output_text = g2p(input_text)
+        output_text = '{' + ' '.join(output_text) + '}'
+        output_text = fxy(re.sub('   ', '} {', output_text))
+        output_text = fxy(re.sub('{.}', '.', output_text))
+        return output_text
+
+class pipeline():
+    def __init__():
+        super().__init__()
+
+    def get_phones(input_text):
+        output_text = input_text
+        return output_text
+    
+class return_text():
+    def __init__():
+        super().__init__()
+
+    def get_phones(input_text):
+        output_text = input_text
         return output_text

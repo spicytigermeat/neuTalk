@@ -1,0 +1,61 @@
+LANG,Français
+FILE,fr.lang
+English,Anglais
+Japanese,Japonais
+neuTalk,neuTalk
+Controls,Contrôles
+Play,Jouer
+Stop,Arrêter
+Save .wav,Sauvegarder .wav
+Open .txt,Ouvrir .txt
+Voice Parameters,Paramètres du voix
+Pitch,Ton
+Speed,Vitesse
+Volume,Volume
+Pause,Pause
+Breath,Souffle
+Speaker,Orateur
+Current Speaker,Orateur actuel
+Site,Site
+ReadMe,ReadMe
+Model Controls,Contrôles du modèle
+Sub-Model,Sous-modèle
+Use Wav Transfer Function,Utiliser la fonction de transfert WAV
+Select a .wav file,Sélectionner un fichier WAV
+Browse,Parcourir
+Wav Transfer Controls,Contrôles de transfert WAV
+Author,Auteur
+Version,Version
+Export Text,Exporter le texte
+Exit,Quitter
+File,Fichier
+Settings,Paramètres
+Dictionary Editor,Éditeur du dictionnaire
+Library Format Tool,Outil de format de la librairie
+Help,Aide
+About,À propos
+Default Speaker,Orateur par défaut
+Display Language,Langue d'affichage
+Speaker Library Parameter Entry,Entrée des paramètres de la librairie de voix
+Speaker Name,Nom d'orateur
+Speaker Icon,Icône d'orateur
+＊Icon must have 1:1 aspect ratio!,＊L'icône doit avoir un rapport hauteur/largeur de 1:1 !
+Autotune,Autotune
+Language,Langage
+English,Anglais
+Japanese,Japonais
+Current Dictionary,Dictionnaire actuel
+Default Language,Langage par défaut
+Change will appear upon reopening neuTalk.,Les changements vont apparaître au redémarrage de neuTalk.
+Install Speaker,Installation d'un orateur
+Select a speaker in .ntkpkg format.,Sélectionner un orateur en format .ntkpkg
+Error,Erreur
+Incorrect file type.,Type de fichier incorrect.
+Please select a .ntkpkg file.,SVP sélectionnez un fichier .ntkpkg.
+Speaker successfully installed.,Orateur installé avec succès.
+Please restart neuTalk.,SVP redémarrez neuTalk.
+Audio,Audio
+Normalize Synthesized Audio,Normaliser l'audio synthétisé
+Speaker Website,Site web d'orateur
+Number of Models,Nombre de modèles
+Speaker Version,Version d'orateur
